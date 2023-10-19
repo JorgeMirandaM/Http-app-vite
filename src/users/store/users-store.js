@@ -1,3 +1,4 @@
+import { User } from "../models/user";
 import { loadUsersByPage } from "../use-cases/load-users-by-page"
 
 
@@ -21,8 +22,26 @@ const loadPreviousPage= async ()=>{
 
 }
 
-const onUserChanged = ()=>{
+/**
+ * 
+ * @param {User} user 
+ */
+const onUserChanged = (updatedUser)=>{
 
+    let wasFound= false;
+
+    state.users= state.users.map(user =>{
+        if( user.id === updatedUser.id){
+            wasFound=true;
+            return updatedUser;
+        }
+
+        return user;
+    });
+
+    if(state.users.length <10 && !wasFound){
+        state.users.push(updatedUser);
+    }
 }
 
 const reloadPage= async ()=>{
